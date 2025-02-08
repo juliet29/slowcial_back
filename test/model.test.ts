@@ -1,8 +1,14 @@
 import { describe, expect, test } from "@jest/globals";
-import { User, addUser, getUser } from "../src/domains/model";
-import createDiscussion from "../src/services/services";
+import { User, addUser, getUser, accessRepo } from "../src/domains/model";
 
-const users: Map<string, User> = new Map();
+
+test("getEntities", () => {
+  const entities = accessRepo("User")
+  // console.log(entities)
+
+  expect(entities).toBeTruthy()
+
+});
 
 
 describe("User", () => {
@@ -11,10 +17,10 @@ describe("User", () => {
       id: "fakeId",
     };
 
-  addUser(user)
+    addUser(user)
 
-  let checkedUser = getUser(user.id)
+    let checkedUser = getUser(user.id)
 
-  expect(checkedUser.id).toBe(user.id)
+    expect(checkedUser.id).toBe(user.id)
   });
 });
