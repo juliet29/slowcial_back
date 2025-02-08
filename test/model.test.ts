@@ -1,26 +1,41 @@
-import { describe, expect, test } from "@jest/globals";
-import { User, addUser, getUser, accessRepo } from "../src/domains/model";
+import { describe, expect, test, afterAll } from "@jest/globals";
+import { accessRepo, getEntityById, addEntity, resetAllFakeRepos } from "../src/domains/model";
 
 
-test("getEntities", () => {
+afterAll(() => resetAllFakeRepos());
+
+test("getting entities from fake repo", () => {
   const entities = accessRepo("User")
-  // console.log(entities)
-
   expect(entities).toBeTruthy()
-
+  
 });
 
+const user = {
+  id: "fakeId",
+};
+const discussion = {
+  id: "fakeId",
+  tags: ["hi", "bye"],
+  responses: ["hi"]
+};
 
-describe("User", () => {
-  test("addUser", () => {
-    const user: User = {
-      id: "fakeId",
-    };
+describe("adding to fake repo", () => {
+  test("user", () => {
 
-    addUser(user)
-
-    let checkedUser = getUser(user.id)
-
-    expect(checkedUser.id).toBe(user.id)
+    addEntity("User", user)
+    let checkedEntity = getEntityById("User", user.id)
+    expect(checkedEntity.id).toBe(user.id)
   });
+  test("discussion", () => {
+    addEntity("Discussion", discussion)
+    let checkedEntity = getEntityById("Discussion", discussion.id)
+    expect(checkedEntity.id).toBe(discussion.id)
+  });
+  test.skip("can't mismatch entities", () => {
+    expect(addEntity("User", discussion)).toThrow()
+
+  });
+
 });
+
+
